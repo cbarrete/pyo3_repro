@@ -1,0 +1,10 @@
+[workspace]
+
+[package]
+name = "third_party"
+
+[[bin]]
+name = "dummy"
+
+[dependencies]
+pyo3 = "0.26"

@@ -1,0 +1,43 @@
+load("@prelude//toolchains:python.bzl", "remote_python_toolchain")
+load("@prelude//toolchains/cxx/zig:defs.bzl", "cxx_zig_toolchain", "zig_distribution")
+load("@prelude//toolchains/cxx/zig:releases.bzl", "releases")
+load(":defs.bzl", "rustup_toolchain")
+
+remote_python_toolchain(
+    name = "python",
+    visibility = ["PUBLIC"],
+)
+
+http_archive(
+    name = "zig_archive",
+    sha256 = releases["0.12.0"]["x86_64-linux"]["shasum"],
+    urls = [releases["0.12.0"]["x86_64-linux"]["tarball"]],
+)
+
+zig_distribution(
+    name = "zig_distribution",
+    arch = "x86_64",
+    dist = ":zig_archive",
+    os = "linux",
+    prefix = "zig-linux-x86_64-0.12.0",
+    suffix = "",
+    version = "0.12.0",
+)
+
+cxx_zig_toolchain(
+    name = "cxx",
+    distribution = ":zig_distribution",
+    visibility = ["PUBLIC"],
+)
+
+http_archive(
+    name = "rustup_distribution",
+    sha256 = "6e5efd6c25953b2732d4e6b1842512536650c68cf72a8b99a0fc566012dd6ca5",
+    urls = ["https://static.rust-lang.org/dist/rust-1.92.0-x86_64-unknown-linux-gnu.tar.gz"],
+)
+
+rustup_toolchain(
+    name = "rust",
+    distribution = ":rustup_distribution",
+    visibility = ["PUBLIC"],
+)

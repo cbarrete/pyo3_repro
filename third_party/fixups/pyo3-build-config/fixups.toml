@@ -1,0 +1,2 @@
+[buildscript.run.env]
+PYO3_PYTHON="$(exe toolchains//:cpython)"
